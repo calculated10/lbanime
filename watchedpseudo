@@ -1,0 +1,155 @@
+// declare struct to store every variables on an anime
+struct animePage{
+	int anime_id              // store anime's unique identifier
+	string anime_title        // store anime's title
+	date anime_releaseDate    // store anime's release date
+	string anime_director     // store director's name
+	string anime_synopsis     // store synopsis of the anime
+	float anime_avgRating     // store the average rating given by users
+	int anime_length          // store the runtime in minutes
+	string anime_type         // store the type of anime (film, tv shows, or short films)
+	string anime_genre        // store the genre of the anime
+}
+
+// declare struct to store variables needed for logging an anime
+struct userReview{
+	float user_rateAnime      // store the rating given by the user
+	string user_dateWatched   // store the date when the user watched the anime (dd, mm, yy)
+	string user_reviewAnime   // store the review written by the user
+	bool user_loveAnime       // store whether the user liked the anime (yes/no)	
+}
+
+// declare struct to store variables for the watched page
+struct watched{
+    int watched_id             // Store anime's id
+    string watched_title       // Store anime's title
+    date watched_releaseDate   // Store anime's release date (used for sorting)
+    string watched_director    // Store anime's director
+    string watched_type        // Store anime type (film, tv shows, short films)
+    watched* left              // Point to the left child (earlier dates)
+    watched* right             // Point to the right child (later dates)
+}
+
+// Root of the watched list binary tree
+watched* root = nullptr
+
+// Function to create a new watched node
+watched* createNode(animePage anime){
+    watched* newNode = new watched
+    newNode->watched_id = anime.anime_id
+    newNode->watched_title = anime.anime_title
+    newNode->watched_releaseDate = anime.anime_releaseDate
+    newNode->watched_director = anime.anime_director
+    newNode->watched_type = anime.anime_type
+    newNode->left = nullptr
+    newNode->right = nullptr
+    return newNode
+}
+
+// Function to insert an anime into the watched binary tree
+watched* insertNode(watched* root, animePage anime){
+    if (root == nullptr){
+        // If the tree is empty, create the root node
+        return createNode(anime)
+    }
+
+    // Sort based on release date (year > month > day)
+    if (anime.anime_releaseDate.year < root->watched_releaseDate.year){
+        root->left = insertNode(root->left, anime)
+    } else if (anime.anime_releaseDate.year > root->watched_releaseDate.year){
+        root->right = insertNode(root->right, anime)
+    } else {
+        // If year is the same, compare month
+        if (anime.anime_releaseDate.month < root->watched_releaseDate.month){
+            root->left = insertNode(root->left, anime)
+        } else if (anime.anime_releaseDate.month > root->watched_releaseDate.month){
+            root->right = insertNode(root->right, anime)
+        } else {
+            // If month is the same, compare day
+            if (anime.anime_releaseDate.day < root->watched_releaseDate.day){
+                root->left = insertNode(root->left, anime)
+            } else {
+                root->right = insertNode(root->right, anime)
+            }
+        }
+    }
+    return root
+}
+
+// Function to add an anime to the watched list
+void addWatched(animePage anime){
+    // Insert the anime into the binary tree
+    root = insertNode(root, anime)
+    print(anime.anime_title + " has been added to your watched list.")
+}
+
+function logReview(animePage anime){
+	// declare variables for log a review functionality
+    declare review as userReview
+
+    print("Rate the anime (0.0 to 10.0): ")
+    input(review.user_rateAnime)
+    
+    print("Write your review: ")
+    input(review.user_reviewAnime)
+
+    print("Did you love the anime? (yes/no): ")
+    input(answer)
+    if(answer == "yes"){
+        review.user_loveAnime = true
+	} else{
+        review.user_loveAnime = false
+	}
+	
+    review.user_dateWatched = currentDate()
+    
+    addWatched(animePage anime)
+}
+
+
+// Inorder traversal of the binary tree to display the watched list sorted by date
+void inorder(watched* node){
+    if (node == nullptr) return
+    
+    inorder(node->left)
+
+    print("Title: " + node->watched_title)
+    print("Release Date: " + node->watched_releaseDate)
+    print("Director: " + node->watched_director)
+    print("Type: " + node->watched_type)
+    print("----------------------")
+    
+    inorder(node->right)
+}
+
+// Function to display the entire watched list
+void displayWatched(){
+    if (root == nullptr){
+        print("Your watched list is empty.")
+    } else {
+        print("Your Watched List: ")
+        inorder(root)
+    }
+}
+
+// function to display anime page with it's details
+function printAnimePage(animePage anime){
+    print("Title: " + anime.anime_title)
+    print("Release Date: " + anime.anime_releaseDate)
+    print("Director: " + anime.anime_director)
+    print("Synopsis: " + anime.anime_synopsis)
+    print("Average Rating: " + anime.anime_avgRating)
+    print("Length: " + anime.anime_length + " minutes")
+    print("Type: " + anime.anime_type)
+    print("Genre: " + anime.anime_genre)
+
+    print("Options:")
+    print("1. Review or Log")
+    print("2. Add to Watchlist")
+	input(option)
+	if(option == 1){
+        logReview(anime)
+	} else if(option == 2){
+        clickWatchlist(anime)	
+	}
+}
