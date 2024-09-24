@@ -1,0 +1,126 @@
+// declare struct to store every variables on an anime
+struct animePage{
+	int anime_id              // store anime's unique identifier
+	string anime_title        // store anime's title
+	int anime_releaseDate     // store anime's release date
+	string anime_director     // store director's name
+	string anime_synopsis     // store synopsis of the anime
+	float anime_avgRating     // store the average rating given by users
+	int anime_length          // store the runtime in minutes
+	string anime_type         // store the type of anime (film, tv shows, or short films)
+	string anime_genre        // store the genre of the anime
+}
+
+// Declare variables for adding an anime into the watchlist
+struct watchlist{
+	int watchlist_id          // store anime's id
+	string watchlist_title    // store anime's title
+	int watchlist_releaseDate // store anime's release date
+	string watchlist_director // store director's name
+	string watchlist_type     // store anime type
+	ptr next                  // point to the next node
+	ptr prev				  // point to the previous node
+}
+
+// Declare variables for watchlist functionality
+string checkWatchlist         // User input for adding to the watchlist
+bool anime_watchlist = false  // To store whether the anime is in the watchlist
+
+watchlist* head = nullptr     // Pointer to the head of the DLL
+watchlist* tail = nullptr     // Pointer to the tail of the DLL
+
+// function to create new node
+watchlist* createNode(animePage anime){
+	watchlist* newNode = new watchlist
+	newNode->watchlist_id = anime.anime_id
+    newNode->watchlist_title = anime.anime_title
+    newNode->watchlist_releaseDate = anime.anime_releaseDate
+    newNode->watchlist_director = anime.anime_director
+    newNode->watchlist_type = anime.anime_type
+    newNode->next = nullptr
+    newNode->prev = nullptr
+    return newNode
+}
+
+void pushTail(animePage anime){
+	watchlist* newNode = createNode(anime);
+	if (tail == nullptr) {
+        // If the list is empty, set the new node as both head and tail
+        head = tail = newNode
+    } else {
+        // Add the new node to the tail
+        tail->next = newNode
+        newNode->prev = tail
+        tail = newNode
+    }
+}
+
+void removeWatchlist(int anime_id){
+    watchlist* temp = head
+    while (temp != nullptr) {
+        if (temp->watchlist_id == anime_id) {
+            if (temp == head && temp == tail) {
+                // Only one node in the list
+                head = tail = nullptr
+            } else if (temp == head) {
+                // Removing the head
+                head = head->next
+                head->prev = nullptr
+            } else if (temp == tail) {
+                // Removing the tail
+                tail = tail->prev
+                tail->next = nullptr
+            } else {
+                // Removing a node in between
+                temp->prev->next = temp->next
+                temp->next->prev = temp->prev
+            }
+            delete temp
+            return
+        }
+        temp = temp->next
+    }
+}
+
+// Function to ask the user if they want to add the anime to the watchlist
+void clickWatchlist(animePage anime){
+	if(anime_watchlist == false){
+		print("Do you want to add this anime to your watchlist? (yes/no): ")
+		input(checkWatchlist)
+		if(checkWatchlist == "yes"){
+            anime_watchlist = true
+            pushTail(anime)
+            print(anime.anime_title + " has been added to your watchlist.")
+        } else{
+            print("The anime was not added to your watchlist.")
+        }
+	} else{
+		print("This anime is already in your watchlist. Do you want to remove? (yes/no): ")
+		input(checkWatchlist)
+		if(checkWatchlist == "yes"){
+			anime_watchlist = false
+			removeWatchlist(anime.anime_id)
+			print("This anime has been removed from your watchlist.")
+		} else{
+			print("This anime still in your watchlist")
+		}
+	}
+}
+
+// function to display the watchlist on the watchlist page
+void displayWatchlist() {
+    if (head == nullptr) {
+        print("Your watchlist is empty.")
+    } else {
+        watchlist* temp = head
+        print("Your Watchlist: ")
+        while(temp != nullptr){
+            print("Title: " + temp->watchlist_title)
+            print("Release Date: " + temp->watchlist_releaseDate)
+            print("Director: " + temp->watchlist_director)
+            print("Type: " + temp->watchlist_type)            
+            print("----------------------")            
+            temp = temp->next
+        }
+    }
+}
