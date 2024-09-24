@@ -19,6 +19,8 @@ struct userReview{
 	bool user_loveAnime       // store whether the user liked the anime (yes/no)	
 }
 
+bool reviewed = false             // to check if the anime is already reviewed or no
+
 // declare struct to store variables for the watched page
 struct watched{
     int watched_id             // Store anime's id
@@ -80,7 +82,10 @@ watched* insertNode(watched* root, animePage anime){
 void addWatched(animePage anime){
     // Insert the anime into the binary tree
     root = insertNode(root, anime)
-    print(anime.anime_title + " has been added to your watched list.")
+    
+    if(reviewed == true){
+    	print(anime.anime_title + " has been added to your watched list.")
+    }	
 }
 
 function logReview(animePage anime){
@@ -102,10 +107,10 @@ function logReview(animePage anime){
 	}
 	
     review.user_dateWatched = currentDate()
-    
+
+    reviewed = true
     addWatched(animePage anime)
 }
-
 
 // Inorder traversal of the binary tree to display the watched list sorted by date
 void inorder(watched* node){
