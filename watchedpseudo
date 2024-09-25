@@ -139,22 +139,28 @@ void displayWatched(){
 
 // function to display anime page with it's details
 function printAnimePage(animePage anime){
-    print("Title: " + anime.anime_title)
-    print("Release Date: " + anime.anime_releaseDate)
-    print("Director: " + anime.anime_director)
-    print("Synopsis: " + anime.anime_synopsis)
-    print("Average Rating: " + anime.anime_avgRating)
-    print("Length: " + anime.anime_length + " minutes")
-    print("Type: " + anime.anime_type)
-    print("Genre: " + anime.anime_genre)
+    int option = 0;
+    do( // add do while loop for printing anime page, where it ends til option = 3
+       print("Title: " + anime.anime_title)
+       print("Release Date: " + anime.anime_releaseDate)
+       print("Director: " + anime.anime_director)
+       print("Synopsis: " + anime.anime_synopsis)
+       print("Average Rating: " + anime.anime_avgRating)
+       print("Length: " + anime.anime_length + " minutes")
+       print("Type: " + anime.anime_type)
+       print("Genre: " + anime.anime_genre)
 
-    print("Options:")
-    print("1. Review or Log")
-    print("2. Add to Watchlist")
-	input(option)
-	if(option == 1){
-        logReview(anime)
-	} else if(option == 2){
-        clickWatchlist(anime)	
-	}
+       print("Options:")
+       print("1. Review or Log")
+       print("2. Add to Watchlist")
+       print("3. Exit")
+       input(option) // input user choice
+       if(option == 1){
+          logReview(anime)
+       } else if(option == 2){
+          clickWatchlist(anime)	
+       } else if(option == 3){
+          break;
+       }
+     }while(option != 3); // sentinel statement is (i != 3)
 }
