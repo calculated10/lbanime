@@ -88,7 +88,7 @@ void addWatched(animePage anime){
     }	
 }
 
-function logReview(animePage anime){
+void logReview(animePage anime){
 	// declare variables for log a review functionality
     declare review as userReview
 
