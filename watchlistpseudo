@@ -86,20 +86,20 @@ void removeWatchlist(int anime_id){
 void clickWatchlist(animePage anime){
 	if(anime_watchlist == false){
 	print(watchlistLable)
-	if(mouseup(watchlistButton)){
+	if(mouseup(yesButton)){
             	anime_watchlist = true
             	pushTail(anime)
 		print(anime.anime_title + " has been added to your watchlist.")
-        } else{
+        } else if(mouseup(noButton)){
             	print("The anime was not added to your watchlist.")
         }
 	} else{
 		print(removeWatchlistLable)
-		if(mouseup(watchlistButton)){
+		if(mouseup(yesButton)){
 			anime_watchlist = false
 			removeWatchlist(anime.anime_id)
 			print("This anime has been removed from your watchlist.")
-		} else{
+		} else if(mouseup(noButton)){
 			print("This anime still in your watchlist")
 		}
 	}
