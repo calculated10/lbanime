@@ -85,19 +85,17 @@ void removeWatchlist(int anime_id){
 // Function to ask the user if they want to add the anime to the watchlist
 void clickWatchlist(animePage anime){
 	if(anime_watchlist == false){
-		print("Do you want to add this anime to your watchlist? (yes/no): ")
-		input(checkWatchlist)
-		if(checkWatchlist == "yes"){
-            anime_watchlist = true
-            pushTail(anime)
-            print(anime.anime_title + " has been added to your watchlist.")
+	print(watchlistLable)
+	if(mouseup(watchlistButton)){
+            	anime_watchlist = true
+            	pushTail(anime)
+		print(anime.anime_title + " has been added to your watchlist.")
         } else{
-            print("The anime was not added to your watchlist.")
+            	print("The anime was not added to your watchlist.")
         }
 	} else{
-		print("This anime is already in your watchlist. Do you want to remove? (yes/no): ")
-		input(checkWatchlist)
-		if(checkWatchlist == "yes"){
+		print(removeWatchlistLable)
+		if(mouseup(watchlistButton)){
 			anime_watchlist = false
 			removeWatchlist(anime.anime_id)
 			print("This anime has been removed from your watchlist.")
