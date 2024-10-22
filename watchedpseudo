@@ -155,10 +155,12 @@ function printAnimePage(animePage anime){
        print("Add to Watchlist")
        print("Exit")
        if(mouseup(reviewButton)){
+	  popUp(watched)
           logReview(anime)
 	  option = 1
        } else if(mouseup(watchlistButton)){
-          clickWatchlist(anime)
+          popUp(watchlist)
+	  clickWatchlist(anime)
 	  option = 2
        } else if(mouseup(exitButton)){
           option = 3
