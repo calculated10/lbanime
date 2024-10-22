@@ -151,16 +151,18 @@ function printAnimePage(animePage anime){
        print("Genre: " + anime.anime_genre)
 
        print("Options:")
-       print("1. Review or Log")
-       print("2. Add to Watchlist")
-       print("3. Exit")
-       input(option) // input user choice
-       if(option == 1){
+       print("Review or Log")
+       print("Add to Watchlist")
+       print("Exit")
+       if(mouseup(reviewButton)){
           logReview(anime)
-       } else if(option == 2){
-          clickWatchlist(anime)	
-       } else if(option == 3){
-          break;
+	  option = 1
+       } else if(mouseup(watchlistButton)){
+          clickWatchlist(anime)
+	  option = 2
+       } else if(mouseup(exitButton)){
+          option = 3
+	  break;
        }
      }while(option != 3); // sentinel statement is (i != 3)
 }
